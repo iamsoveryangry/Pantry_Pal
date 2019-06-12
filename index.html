@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pantry Pal</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+  <script src="https://kit.fontawesome.com/9f8a8898a1.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+</head>
+<body>
+    <p align = center><img id= "logo" src="images/logo.svg" style="width:40vw; height:40vw;"></p>
+
+    <div class="container" align = "center">
+      <div class="row">
+        <div class="col-sm-12">
+
+<button class="accordion1"><i class="fas fa-list-alt fa-2x"></i></button>
+<div class="panel">
+        <span id="progress"></span>
+
+		<label id="fileSelector"></label>
+            
+        <label for="result">Date: </label>
+        <textarea id="result"><input type="text" id="result"></textarea>
+        <br>        
+
+        <label for="title">Title: </label>
+        <input type="text" id="title">
+        <br>
+
+        <button class="add2db"><i class="fas fa-plus"></i></button>
+        <button class="viewDB"><i class="fas fa-sync-alt"></i></button>
+        <button class="delDB"><i class="fas fa-trash-alt"></i></button>
+
+        <table id="display" border="1"></table>
+
+        
+
+</div>
+<p></p>
+
+<button class="accordion2"><i class="fas fa-camera-retro fa-2x"></i></button>
+<div class="panel">
+        	<video id="video" width="640" height="480" autoplay></video>
+            <button id="snap" class="snap"><i class="fas fa-camera-retro fa-2x"></i></button>
+            <canvas id="canvas" width="640" height="480"></canvas>
+
+<!-- ////////Download button,from https://jsfiddle.net/wboykinm/fL0q2uce/////////  -->
+    <a id="download"><button id="download" class="download"><i class="fas fa-download fa-2x"></i></button></a>
+
+<!-- Start of file upload, click here -->
+<!-- <input type="file" style="position:absolute; top: -100px" id="picker" onchange="picked_file(this.files[0])">
+                
+    <canvas id='c' class="" width="400" height="300"></canvas>
+    <div class="output nose" style="padding: 25px; cursor: pointer" onclick="open_picker()"> 
+        Drag and drop an image here or click this box to upload an image.  -->
+<!-- End of file upload, click here -->
+
+<div class="output">
+
+    <div id="output">
+    <div id="text"></div>
+    <span id="timing"></span>
+    </div>
+    </div>
+
+<br>
+<br>
+<br>
+
+</div>
+<p></p>
+
+<button class="howto"><a href = "howto.html" target=_self><i class="fas fa-question-circle fa-2x"></i></a></button>
+
+
+<!---------------------------------------- Start of the camera script ---------------------------------------->
+<script>
+// function step1(){
+    
+////////Beginning of camera script, gotten from https://davidwalsh.name/browser-camera//////// 
+var video = document.getElementById('video');
+
+
+// var supports = navigator.mediaDevices.getSupportedConstraints();
+// if( supports['facingMode'] === true ) {
+//   flipBtn.disabled = false;
+// }
+
+
+//var image = document.querySelector('img.photo');
+
+//Camera
+if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ "video": {"facingMode":{"ideal": "environment"}}}).then(function(stream) {
+        video.srcObject = stream;
+        video.play();
+    });
+}
+
+const constraints = {
+    "video": {
+        "facingMode":
+        {"ideal": "environment"}
+    }    
+};
+    
+//const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+//Canvas stuff
+var canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+//var context = canvas.getContext('2d');
+var video = document.getElementById('video');
+
+// var img        
+
+//Take a photo
+document.getElementById("snap").addEventListener("click", function() {
+    ctx.drawImage(video, 0, 0, 640, 480);
+
+    // var imageDataURL = canvas.toDataURL('image/png');
+
+    //  image.setAttribute('src', imageDataURL);
+
+    var img = convertCanvasToImage();
+
+
+    img.onload = function(){
+    ("loaded...", "$$$$");
+
+	(img.width);
+    (img.height);
+    Tesseract.recognize(img).progress((progress)=>{
+
+      if(progress.status === "recognizing text"){
+      $('#progress').text(progress.progress*100 + "%");
+      }
+
+
+
+    }).then((result)=>{
+
+      (result, "$$$$");
+
+      $('#result').text(result.text);
+
+    })
+	}
+
+});
+
+function convertImageToCanvas(image) {
+	var canvas = document.createElement("canvas");
+	canvas.width = image.width;
+	canvas.height = image.height;
+	canvas.getContext("2d").drawImage(image, 0, 0);
+
+	return canvas;
+}
+
+function convertCanvasToImage() 
+{
+  var image = new Image();
+  image.src = canvas.toDataURL("image/png");
+  return image;
+}
+////////End of of camera script, gotten from https://davidwalsh.name/browser-camera////////
+
+////////Start of download image script, gotten from https://jsfiddle.net/wboykinm/fL0q2uce/////////   
+function downloadCanvas(link, canvasId, filename) {
+    link.href = document.getElementById(canvasId).toDataURL();
+    link.download = filename;
+}
+        
+document.getElementById('download').addEventListener('click', function() {
+    downloadCanvas(this, 'canvas', 'image.png');
+}, false);
+
+
+////////End of download image script, gotten from https://jsfiddle.net/wboykinm/fL0q2uce/////////   
+
+// var c = document.getElementById('c'),
+//                 o = c.getContext('2d');
+
+//             function reset_canvas(){
+//                 o.fillStyle = 'white'
+//                 o.fillRect(0, 0, c.width, c.height)
+//                 o.fillStyle = 'black'   
+//             }
+// }
+
+
+// document.body.ondragover = function(){ document.body.className = 'dragging'; return false }
+//             document.body.ondragend = function(){ document.body.className = ''; return false }
+//             document.body.onclick = function(){document.body.className = '';}
+//             document.body.ondrop = function(e){
+//                 e.preventDefault();
+//                 document.body.className = '';
+//                 picked_file(e.dataTransfer.files[0]);
+//                 return false;
+//             }
+
+//              function open_picker(){
+//                  var e = document.createEvent("MouseEvents");    
+//                  e.initEvent('click', true, true);
+//                  document.getElementById('picker').dispatchEvent(e);
+//              }
+
+//             function picked_file(file){
+//                 if(!file) return;
+//                  document.getElementById("output").className = 'processing'
+
+//                 var ext = file.name.split('.').slice(-1)[0];
+//                 var reader = new FileReader();
+
+//                 if(file.type == "image/x-portable-bitmap" || ext == 'pbm' || ext == 'pgm' || ext == 'pnm' || ext == 'ppm'){
+//                     reader.onload = function(){
+//                         reset_canvas();
+//                         document.getElementById("text").innerHTML = 'Reading..'
+//                         o.font = '30px sans-serif'
+//                         o.fillText('No previews for NetPBM format.', 50, 100);
+//                         runOCR(new Uint8Array(reader.result), true);
+//                     }
+//                     reader.readAsArrayBuffer(file)
+//                 }else{
+//                     reader.onload = function(){
+//                         var img = new Image();
+//                         img.src = reader.result;
+//                         img.onerror = function(){
+//                             reset_canvas();
+//                             o.font = '30px sans-serif'
+//                             o.fillText('Error: Invalid Image ' + file.name, 50, 100);
+//                         }
+//                         img.onload = function(){
+//                             document.getElementById("text").innerHTML = 'Reading...'
+//                             reset_canvas();
+//                             var rat = Math.min(c.width / img.width, c.height / img.height);
+//                             o.drawImage(img, 0, 0, img.width * rat, img.height * rat)
+//                             var tmp = document.createElement('canvas')
+//                             tmp.width = img.width;
+//                             tmp.height = img.height;
+//                             var ctx = tmp.getContext('2d')
+//                             ctx.drawImage(img, 0, 0)
+//                             var image_data = ctx.getImageData(0, 0, tmp.width, tmp.height);
+//                             runOCR(image_data, true)
+//                         }
+                        
+//                     }
+//                     reader.readAsDataURL(file)
+//                 }
+                
+//             }
+
+// Tesseract.recognize(url).then(function (result) {
+//             var resultText = result.text ? result.text.trim() : '';
+
+//             //show the result
+            
+//             $('blockquote p').html('&bdquo;' + resultText + '&ldquo;');
+//             $('blockquote footer').text('(' + resultText.length + ' characters)');
+//         });
+
+      // let img = new Image()
+      // img.src = "image.png"
+      // img.onload = function(){
+
+      //   console.log("loaded...", "$$$$");
+
+      //   Tesseract.recognize().progress((progress)=>{
+
+      // if(progress.status === "recognizing text"){
+      // $('#progress').text(progress.progress*100 + "%");
+      // }
+
+      //   }).then((result)=>{
+
+      //   console.log(result, "$$$$");
+
+      //   $('#result').text(result.text);
+
+      //   })
+      //}
+
+    
+
+</script>
+<!---------------------------------------- End of picker script ---------------------------------------->
+
+<!---------------------------------------- Start of database ---------------------------------------->
+        
+<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        
+<!--
+var db = new Dexie("MyPantry");
+    db.version(1).stores({food: '++id,name,date'});
+        
+async function main () {
+        
+    var id = await db.food.add({name: })
+        
+}
+-->
+        
+<!---------------------------------------- End of database ---------------------------------------->        
+
+<!-- <script>   
+console.log("loaded...", "$$$$");
+
+        Tesseract.recognize(image).progress((progress)=>{
+
+      if(progress.status === "recognizing text"){
+      $('#progress').text(progress.progress*100 + "%");
+      }
+
+        }).then((result)=>{
+
+        console.log(result, "$$$$");
+
+        $('#result').text(result.text);
+
+        })
+</script>
+ -->
+        <!-- <img src="March.png" alt=" " width="300"> -->
+
+<!-- <button class="accordion">Inventory</button>
+<div class="panel">
+            
+        <hr>
+
+        <span id="progress"></span>
+        <h6>Result</h6>         
+		<label id="fileSelector"></label>
+            
+        <label for="result">Date: </label>
+
+        <textarea id="result"><input type="text" id="result"></textarea>
+        
+
+        <label for="title">Title: </label>
+        <input type="text" id="title">
+
+        <button src="Database.html" id="add2db">Add</button>
+
+        <table id="display" border="1"></table>
+
+        <button id="viewDB">Refresh Datbase</button>
+        <button id="delDB">Delete Datbase</button>
+
+</div> -->
+
+
+<script>
+var acc = document.getElementsByClassName("accordion1");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+<script>
+var acc = document.getElementsByClassName("accordion2");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+        
+<script type="text/javascript" src ="javascript.js"></script>        
+
+<!--  <script>
+
+var elmFile = document.getElementById('fileSelector');
+var elmAdd = document.getElementById('add2db');
+var elmView = document.getElementById('viewDB');
+//var elmDeldb = document.getElementById('delDB');
+
+elmFile.addEventListener('change', handleFileSelection, false);
+elmAdd.addEventListener('click', handleAdd, false);
+elmView.addEventListener('click', handleView, false);
+//elmDeldb.addEventListener('click', handleDeleteDB, false);
+
+var elmTitle = document.getElementById('title');
+var elmresult = document.getElementById('result');
+var elmTable = document.getElementById('display');
+
+var elmMessages = document.getElementById('messages');
+function xalert(message) {elmMessages.innerHTML += message + "<br>";}
+
+// Delete Database
+//function handleDeleteDB(){
+//  db.delete();
+//  handleView();
+//  xalert("You'll need to refresh");
+//}
+
+var db = new Dexie("visDB");
+db.version(1).stores({id3: "++id, title, result"});
+db.open().catch(function(e) {xalert("Open failed: " + e);});
+
+function handleFileSelection(e) {
+ID3.loadTags(url, function() {
+    var tags = ID3.getAllTags(url);
+
+if (tags.title !== undefined) {
+    elmTitle.value = tags.title;
+}else{
+     elmTitle.value = "";
+}
+if (tags.result !== undefined) {
+    elmresult.value = tags.result;
+}else{
+    elmresult.value = "";
+}
+}, 
+{
+dataReader: ID3.FileAPIReader(fileStore),
+tags: ["result", "title"]
+}
+);
+
+handleView();
+}
+    
+function handleAdd(){
+    var title = elmTitle.value;
+    var result = elmresult.value;
+    db.id3.add({title: title, result: result});
+    handleView();
+}
+
+function handleView() {
+    elmTable.innerHTML = "";
+    db.id3.each(function(results) {
+        var tr = "<tr>";
+        var td1 = "<td>" + results.title + "</td>";
+        var td2 = "<td>" + results.result + "</td>";
+        var td3 = "<td><a onclick=\"handleRemove(" + results.id + ")\">Remove</a></td>";
+        var tr4 = "</tr></td>";
+        elmTable.innerHTML = elmTable.innerHTML + tr + td1 + td2 + td3 + tr4;
+    })
+}
+
+function handleRemove(i){
+  db.id3.where("id").equals(i).delete();
+  handleView();
+}
+
+handleView();
+
+</script>        -->    
+            
+
+
+        
+<!--        <div id="result"></div>-->
+
+        </div>
+
+      </div>
+      
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <!-- <script src="tesseract.js"></script> -->
+    <!-- <script>
+    	
+    	import Tesseract from 'tesseract.js';
+
+        const { TesseractWorker } = Tesseract;
+        const worker = new TesseractWorker();
+
+    </script> -->
+
+    <script>
+      
+     // Tesseract.recognize(ctx).then(function (result) {
+     //        var resultText = result.text ? result.text.trim() : '';
+
+     //        //show the result
+            
+     //        $('blockquote p').html('&bdquo;' + resultText + '&ldquo;');
+     //        $('blockquote footer').text('(' + resultText.length + ' characters)');
+     //    });
+
+        </script>
+
+
+</body>
+</html>
+
+<!-- https://kdzwinel.github.io/JS-OCR-demo/ -->

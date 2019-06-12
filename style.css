@@ -1,0 +1,138 @@
+html {
+      box-sizing: border-box;
+      font-size: 10px;
+      margin-top: 2%; 
+      margin-left: 2%;
+    }
+
+body {
+      font-family: 'Ubuntu', sans-serif;
+      color: #333;
+      font-size: 1.6rem;
+      background-color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      text-align: center;
+    }
+td {
+  padding: 5px 15px;
+}
+
+a{color: #FFFFFF;}
+
+.accordion1 {
+  background-color: #fff;
+  background-size: 200%;
+  background-image: linear-gradient(to right, #FF8357 0%, #FAC172 100%);
+  color: #FFF;
+  cursor: pointer;
+  padding: 20px;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+.accordion2 {
+  background-color: #fff;
+  background-size: 200%;
+  background-image: linear-gradient(to right, #FAC172 0%, #ADC965 100%);
+  color: #FFF;
+  cursor: pointer;
+  padding: 20px;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+.howto {
+  background-color: #fff;
+  background-size: 200%;
+  background-image: linear-gradient(to right, #ADC965 0%, #89D5C9 100%);
+  color: #FFF;
+  cursor: pointer;
+  padding: 20px;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+.add2db, .download {
+  background-color: #fff;
+  color:  #89D5C9;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+.viewDB, .snap {
+  background-color: #fff;
+  color: #ADC965;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+.delDB {
+  background-color: #fff;
+  color: #FF8357;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 2px;
+}
+
+
+.active, .accordion:hover {
+  background-color: #FFF; 
+}
+
+.panel {
+  padding: 0 18px;
+  display: none;
+  background-color: white;
+  overflow: hidden;
+}
+
+textarea {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 5px 0;
+  display: inline-block;
+  border: 1px solid #eee;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  resize: none;
+}
+
+input[type=text] {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 5px 0;
+  display: inline-block;
+  border: 1px solid #eee;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+  resize: none;
+  }
+
+
+.container {
+  max-width: 640px;
+  margin: 30px auto 30px;
+  padding: 20px !important;
+  width: 90%;
+  background-color: #efefef;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 3px 6px rgba(0,0,0,0.10);
+  border-radius:20px
+}
+
